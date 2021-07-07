@@ -4,8 +4,8 @@
 
 import 'package:flutter/material.dart';
 
-class ListDemo extends StatelessWidget {
-  const ListDemo({Key? key}) : super(key: key);
+class ListScreen extends StatelessWidget {
+  const ListScreen({Key? key}) : super(key: key);
 
 
   @override

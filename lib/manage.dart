@@ -15,8 +15,7 @@ class ManageScreenState extends State<ManageScreen> {
       appBar: AppBar(
         title: Text("할일 관리"),
       ),
-      body: Column( // 컬럼으로 교체
-        // 자식들을 추가
+      body: Column(
         children: <Widget>[
           _buildTextComposer(),
           _buildListComposer(),
@@ -24,7 +23,7 @@ class ManageScreenState extends State<ManageScreen> {
       ),
     );
   }
-  List<String> entries = <String>['메일 확인', '일감 확인', '인강 30분', '운동 30분', '독서 30분' ];
+  List<String> entries = <String>['출근하기', '점심먹기', '퇴근하기', '아무것도안하기' ];
   final List<int> colorCodes = <int>[600, 500, 100];
   Widget _buildListComposer() {
     return ListView.builder(

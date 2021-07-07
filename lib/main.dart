@@ -2,15 +2,30 @@ import 'package:flutter/material.dart';
 import 'manage.dart';
 import 'list.dart';
 import 'todo.dart';
+import 'login.dart';
 void main() {
   runApp(MaterialApp(
     title: 'HOMIN',
+    theme: ThemeData(
+      // 상호작용 요소에 사용되는 색상
+      // brightness: Brightness.light,
+      //
+      // // 앱의 주요부분 배경 색 (앱바, 탭바 등)
+      // primaryColor: Colors.greenAccent,
+      //
+      // // 위젯의 전경색
+      // accentColor: Colors.redAccent,
+
+      // 앱에 기본으로 사용될 폰트
+      // fontFamily: 'IBM-Sans'
+    ),
     initialRoute: '/',
     routes: {
-      '/': (context) => HomeScreen(),
+      '/': (context) => LoginScreen(),
+      '/home': (context) => HomeScreen(),
       '/manage': (context) => ManageScreen(),
       '/todo': (context) => TodoScreen(),
-      '/history': (context) => ListDemo(),
+      '/history': (context) => ListScreen(),
     },
   ));
 }
@@ -21,61 +36,84 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('homin\'s todo'),
-      ),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: Colors.green),
-            child: Text('manage'),
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
             onPressed: () {
-              // Named route를 사용하여 두 번째 화면으로 전환합니다.
               Navigator.pushNamed(context, '/manage');
             },
           ),
-          const SizedBox(width: 5),
-          ElevatedButton(
-            child: Text('todo'),
+          IconButton(
+            icon: const Icon(Icons.logout),
             onPressed: () {
-              // Named route를 사용하여 두 번째 화면으로 전환합니다.
-              Navigator.pushNamed(context, '/todo');
+              Navigator.pushReplacementNamed(context, "/");
             },
           ),
-          const SizedBox(width: 5),
-          ElevatedButton(
-            child: Text('history'),
-            onPressed: () {
-              // Named route를 사용하여 두 번째 화면으로 전환합니다.
-              Navigator.pushNamed(context, '/history');
-            },
-          ),
-        ],
+        ]
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                      '양호민',
+                      style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold))
+                ]
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: 5),
+                ElevatedButton(
+                  child: Text('todo'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/todo');
+                  },
+                ),
+                const SizedBox(width: 5),
+                ElevatedButton(
+                  child: Text('history'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/history');
+                  },
+                ),
+                const SizedBox(width: 5),
+              ],
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '아이유',
+                    style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold))
+                ]
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: 5),
+                ElevatedButton(
+                  child: Text('todo'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/todo');
+                  },
+                ),
+                const SizedBox(width: 5),
+                ElevatedButton(
+                  child: Text('history'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/history');
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 }
-
-// class TodoScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("TODO"),
-//       ),
-//       body: Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Center(
-//             child: ElevatedButton(
-//               child: Text('TODO'),
-//               onPressed: () {
-//                 // Named route를 사용하여 두 번째 화면으로 전환합니다.
-//                 Navigator.pushNamed(context, '/todo');
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

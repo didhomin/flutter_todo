@@ -22,7 +22,7 @@ class TodoScreenState extends State<TodoScreen> {
       ),
     );
   }
-  List<String> entries = <String>['메일 확인', '일감 확인', '인강 30분', '운동 30분', '독서 30분' ];
+  List<String> entries = <String>['출근하기', '점심먹기', '퇴근하기', '아무것도안하기' ];
   final List<int> colorCodes = <int>[600, 500, 100];
 
   Widget _buildListComposer() {
@@ -32,23 +32,24 @@ class TodoScreenState extends State<TodoScreen> {
         padding: const EdgeInsets.all(8),
         itemCount: entries.length,
         itemBuilder: (BuildContext context, int index) {
-          return Dismissible(
-              key: Key(entries[index]),
-              onDismissed: (direction) {
-                setState(() {
-                  entries.removeAt(index);
-                });
-                Scaffold.of(context)
-                    .showSnackBar(SnackBar(content: Text("dismissed")));
-              },
-              background: Container(
-                color: Colors.red,
-                child: Icon(Icons.delete),
+          return ListTile(
+            leading: AspectRatio(
+              aspectRatio: 0.5,
+              child: Checkbox(
+                value: index%3 == 0,
+                onChanged: (checked) {
+                  setState(() {
+
+                  });
+                },
               ),
-              child: Card(
-                margin: EdgeInsets.all(20),
-                child: Text(entries[index]),
-              ));
+            ),
+            title: Text(entries[index], style: Theme.of(context).textTheme.headline6),
+            trailing: IconButton(
+                icon: Icon(Icons.note),
+                onPressed: () => {}),
+          );
+
 
           // return Container(
           //   height: 50,
@@ -62,20 +63,20 @@ class TodoScreenState extends State<TodoScreen> {
 
 }
 
-// return ListTile(
-// leading: AspectRatio(
-// aspectRatio: 0.5,
-// child: Checkbox(
-// value: index%3 == 0,
-// onChanged: (checked) {
+// return Dismissible(
+// key: Key(entries[index]),
+// onDismissed: (direction) {
 // setState(() {
-//
+// entries.removeAt(index);
 // });
+// Scaffold.of(context)
+//     .showSnackBar(SnackBar(content: Text("dismissed")));
 // },
+// background: Container(
+// color: Colors.red,
+// child: Icon(Icons.delete),
 // ),
-// ),
-// title: Text(entries[index], style: Theme.of(context).textTheme.headline6),
-// trailing: IconButton(
-// icon: Icon(Icons.note),
-// onPressed: () => {}),
-// );
+// child: Card(
+// margin: EdgeInsets.all(20),
+// child: Text(entries[index]),
+// ));
