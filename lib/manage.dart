@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'list.dart';
+import 'item.dart';
+import 'DBHelper.dart';
 class ManageScreen extends StatefulWidget {
   @override
   State createState() => ManageScreenState();
@@ -23,14 +25,18 @@ class ManageScreenState extends State<ManageScreen> {
       ),
     );
   }
-  List<String> entries = <String>['출근하기', '점심먹기', '퇴근하기', '아무것도안하기' ];
-  final List<int> colorCodes = <int>[600, 500, 100];
+  List<Item> items = <Item>[
+    Item(seq :1,isCheck: true, title:'출근하기'),
+    Item(seq :2,title:'점심먹기'),
+    Item(seq :3,title:'퇴근하기'),
+    Item(seq :4,isCheck: true,title:'아무것도안하기'),
+  ];
   Widget _buildListComposer() {
     return ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
-        itemCount: entries.length,
+        itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             // leading: AspectRatio(
@@ -44,11 +50,11 @@ class ManageScreenState extends State<ManageScreen> {
             //     },
             //   ),
             // ),
-            title: Text(entries[index], style: Theme.of(context).textTheme.headline6),
+            title: Text(items[index].title, style: Theme.of(context).textTheme.headline6),
             trailing: IconButton(
                 icon: Icon(Icons.highlight_off_outlined),
                 onPressed: () =>
-                    _handleRemoved(entries[index])),
+                    _handleRemoved(index)),
           );
 
           // return Container(
@@ -83,7 +89,7 @@ class ManageScreenState extends State<ManageScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: () =>
+                        onPressed:  () async =>
                             _handleSubmitted(_textController.text)),
                   ),
                 ],
@@ -93,17 +99,18 @@ class ManageScreenState extends State<ManageScreen> {
     );
   }
 
-  void _handleSubmitted(String text) {
+  Future _handleSubmitted (String text) async {
     if(text == '') {
       return;
     }
-    entries.add(text);
+    items.add(Item(seq:items.length,title:text));
+    await DBHelper().insertRow(text);
     _textController.clear();
     setState(() {});
   }
 
-  void _handleRemoved(String text) {
-    entries.remove(text);
+  void _handleRemoved(int index) {
+    items.removeAt(index);
     setState(() {});
   }
 }
