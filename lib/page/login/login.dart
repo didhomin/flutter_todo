@@ -1,10 +1,12 @@
-// Copyright 2019 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter_app/blocs/auth/authentication_bloc.dart';
+import 'package:flutter_app/models/user.dart';
+import 'package:flutter_app/util/routes_paths.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_app/repositorys/auth_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -14,13 +16,16 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('로그인'),
-          automaticallyImplyLeading: false),
-      body: SafeArea(
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if(state.user != User.empty) {
+          Navigator.pushReplacementNamed(context,RoutesPaths.todoListPage);
+        }
+      },
+      child: SafeArea(
         child: _MainView(),
       ),
     );
@@ -29,12 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 class _MainView extends StatelessWidget {
+
   const _MainView({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // AuthServices authServices = AuthServices();
     List<Widget> listViewChildren;
     listViewChildren = [
       _UsernameInput(),
@@ -43,7 +50,15 @@ class _MainView extends StatelessWidget {
       ElevatedButton(
         child: Text('로그인'),
         onPressed: () {
-          Navigator.pushReplacementNamed(context, "/home");
+          // loginServices.getUser();
+          BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLogInRequested('didhomin', 'qwer1234'));
+          // Navigator.pushReplacementNamed(context, RoutesPaths.todoListPage);
+        },
+      ),
+      ElevatedButton(
+        child: Text('회원가입'),
+        onPressed: () {
+          Navigator.pushNamed(context, RoutesPaths.registerPage);
         },
       ),
     ];
@@ -80,7 +95,7 @@ class _UsernameInput extends StatelessWidget {
         child: TextField(
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-            labelText: '이름',
+            labelText: '아이디',
           ),
         ),
       ),

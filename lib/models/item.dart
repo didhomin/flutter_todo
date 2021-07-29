@@ -1,3 +1,14 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'item.g.dart';
+
+/**
+ * json 파싱하는법
+ * part 'item.g.dart';
+ * @JsonSerializable()
+ * flutter pub run build_runner build
+ * */
+@JsonSerializable()
 class Item {
   final int seq;
   bool isCheck;
@@ -12,6 +23,10 @@ class Item {
     this.contents = '',
     this.memo = '',
   });
+
+  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ItemToJson(this);
 
   @override
   String toString() {

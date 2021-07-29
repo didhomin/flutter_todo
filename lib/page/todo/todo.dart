@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app/DBHelper.dart';
-import 'list.dart';
-import 'item.dart';
+import 'package:flutter_app/page/todo/list.dart';
+import 'package:flutter_app/models/item.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 import 'package:intl/intl.dart' as intl;
-import 'DBHelper.dart';
+
 class TodoScreen extends StatefulWidget {
   @override
   State createState() => TodoScreenState();
@@ -15,9 +14,6 @@ class TodoScreenState extends State<TodoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("할일"),
-      ),
       body: _buildListComposer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {Navigator.pushNamed(context, '/insert')},
@@ -28,16 +24,15 @@ class TodoScreenState extends State<TodoScreen> {
   }
   String title = '';
   List<Item> items = <Item>[
-    Item(seq: 1, isCheck: true, title: '출근하기'),
-    Item(seq: 2, title: '점심먹기'),
-    Item(seq: 3, title: '퇴근하기'),
-    Item(seq: 4, isCheck: true, title: '아무것도안하기'),
+    // Item(seq: 1, isCheck: true, title: '출근하기'),
+    // Item(seq: 2, title: '점심먹기'),
+    // Item(seq: 3, title: '퇴근하기'),
+    // Item(seq: 4, isCheck: true, title: '아무것도안하기'),
   ];
   Future _countRecord() async {
-    print('call _countRecord2');
-    var items = await DBHelper().getItems();
+    // var items = [Item];
+    // var items = await DBHelper().getItems();
 
-    print(items);
     setState(() {
       this.items = items;
     });
@@ -54,7 +49,6 @@ class TodoScreenState extends State<TodoScreen> {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             onTap: () async {
-              print('call _countRecord');
               await _countRecord();
             },
             leading: AspectRatio(
