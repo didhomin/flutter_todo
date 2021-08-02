@@ -7,6 +7,8 @@ part 'item.g.dart';
  * part 'item.g.dart';
  * @JsonSerializable()
  * flutter pub run build_runner build
+ * flutter pub run build_runner build --delete-conflicting-outputs
+
  * */
 @JsonSerializable()
 class Item {
@@ -30,7 +32,7 @@ class Item {
 
   @override
   String toString() {
-    return 'Item{seq: $seq, isCheck: $isCheck, title: $title, contents: $contents, memo: $memo}';
+    return 'ItemDto{seq: $seq, isCheck: $isCheck, title: $title, contents: $contents, memo: $memo}';
   }
 }
 

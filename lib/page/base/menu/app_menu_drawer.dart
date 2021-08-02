@@ -41,7 +41,7 @@ class AppMenuState extends State<AppMenu> with RouteAware {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountEmail: Text(user.id),
-            accountName: Text(user.nickname)
+            accountName: Text(user.nickname??'')
           ),
           // ListTile(
           //   leading: Icon(Icons.person),

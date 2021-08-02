@@ -1,51 +1,50 @@
 import 'dart:convert';
+import 'package:flutter_app/util/http_helper.dart';
 import 'package:http/http.dart';
 import 'package:flutter_app/models/user.dart';
 // import 'package:shared/shared.dart';
 
-
-
 class AuthRepository {
-  Client client = Client();
+
+  Future<User> join(User user) async {
+
+    var body = json.encode(user.toJson());
+
+    final responseDto = await HttpHelper.post('/api/auth/register',body: body);
+
+    if (responseDto.success == 'true') {
+      return User.fromJson(responseDto.response);
+    } else {
+      throw Exception('Failed Register');
+    }
+  }
+
 
   Future<User> logIn(String id,String password) async {
+    print('login');
     User loginData = User.login(id,password);
 
-    final _authority = "192.168.1.3:9094";
-    final _path = "/api/auth/login";
-    final _params = { };
+    var body = json.encode(loginData.toJson());
 
-    var body = json.encode(loginData.toLoginJson());
+    final responseDto = await HttpHelper.post('/api/auth/login',body: body);
 
-    Map<String,String> headers = {
-      'Content-type' : 'application/json',
-      'Accept': 'application/json',
-    };
-
-    final response = await client.post(Uri.http(_authority,_path),headers: headers, body: body);
-
-    if (response.statusCode == 200) {
-      return User.fromJson(json.decode(response.body)['response']);
+    if (responseDto.success == 'true') {
+      return User.fromJson(responseDto.response);
     } else {
       throw Exception('Failed LogIn');
     }
   }
 
-  Future<User> logOut() async {
-    // User loginData = User.empty;
+  Future<bool> logOut() async {
 
-    // final _authority = "192.168.1.3:9094";
-    // final _path = "/api/auth/login";
-    // final _params = { };
-    // print("body json : ${loginData.toLoginJson()}");
-    // final response = await client.post(Uri.http(_authority,_path),body: loginData.toLoginJson());
+    final responseDto = await HttpHelper.post('/api/auth/logout');
 
-    // if (response.statusCode == 200) {
-    //   print("res data : ${User.fromJson(json.decode(response.body))}");
-      return User.empty;
-    // } else {
-    //   throw Exception('Failed LogOut ');
-    // }
+    if (responseDto.success == 'true') {
+      // responseDto.response;
+      return true;
+    } else {
+      throw Exception('Failed LogOut ');
+    }
   }
 
 

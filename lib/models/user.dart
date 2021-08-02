@@ -5,8 +5,8 @@ part 'user.g.dart';
 class User {
   final num seq;
   final String id;
-  final String password;
-  final String nickname;
+  final String? password;
+  final String? nickname;
 
   const User(
     this.seq,
@@ -23,7 +23,6 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
-  Map<String, dynamic> toLoginJson() => _$UserToLoginJson(this);
 
   static const empty = User(-1,'','');
 

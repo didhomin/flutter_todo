@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/util/routes_paths.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_app/blocs/login/login_bloc.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.status == LoginStatus.success) {
-          print(state);
-          Navigator.pushReplacementNamed(context, RoutesPaths.todoListPage);
-        }
         if (state.status == LoginStatus.error) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -66,7 +61,7 @@ class _PasswordInput extends StatelessWidget {
         return TextField(
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) =>
-              BlocProvider.of<LoginBloc>(context).add(LoginPasswordChanged(password)),
+            BlocProvider.of<LoginBloc>(context).add(LoginPasswordChanged(password)),
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',

@@ -42,6 +42,8 @@ class _MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // AuthServices authServices = AuthServices();
+    User user = User.empty;
+
     List<Widget> listViewChildren;
     listViewChildren = [
       _NormalInput('아이디'),
@@ -80,6 +82,7 @@ class _MainView extends StatelessWidget {
 class _NormalInput extends StatelessWidget {
 
   final String title;
+
   const _NormalInput(this.title,{
     Key? key,
   }) : super(key: key);
@@ -95,6 +98,9 @@ class _NormalInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: title,
           ),
+          onChanged: (value) {
+
+          },
         ),
       ),
     );
