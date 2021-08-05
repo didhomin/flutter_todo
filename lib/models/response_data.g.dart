@@ -9,9 +9,9 @@ part of 'response_data.dart';
 ResponseData _$ResponseDataFromJson(Map<String, dynamic> json) {
   return ResponseData(
     json['success'] as String,
-    json['response'] as Map<String, dynamic>,
-    json['errorCode'] as String,
-    json['message'] as String,
+    json['response'] as dynamic,
+    json['errorCode'] as String?,
+    json['message'] as String?,
   );
 }
 

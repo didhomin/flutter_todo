@@ -6,7 +6,7 @@ import 'package:flutter_app/models/user.dart';
 
 class HttpHelper {
   static Client _client = Client();
-  static String _host = "192.168.1.3:9094";
+  static String _host = "192.168.0.28:9094";
 
   static Map<String,String> _headers = {
     'Content-type' : 'application/json',

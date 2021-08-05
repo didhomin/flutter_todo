@@ -4,9 +4,9 @@ part 'response_data.g.dart';
 @JsonSerializable()
 class ResponseData {
   final String success;
-  final Map<String, dynamic> response;
-  final String errorCode;
-  final String message;
+  final dynamic response;
+  final String? errorCode;
+  final String? message;
 
   const ResponseData(
     this.success,

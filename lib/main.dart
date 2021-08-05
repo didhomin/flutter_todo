@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/blocs/auth/authentication_bloc.dart';
 import 'package:flutter_app/repositorys/auth_repository.dart';
-import 'package:flutter_app/util/http_helper.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'app.dart';
+import 'package:get/get.dart';
 
-Future<void> main() async {
-  try {
-    runApp(
-      BlocProvider(
-        create: (context) {
-          return AuthenticationBloc(authRepository: AuthRepository());
+import 'app/routes/app_pages.dart';
+import 'services/auth_service.dart';
+
+void main() {
+  runApp(
+    GetMaterialApp.router(
+      title: "TODO",
+      initialBinding: BindingsBuilder(
+            () {
+          Get.put(AuthRepository());
+          Get.put(AuthService(authRepository:Get.find()));
         },
-        child: TodoApp(),
       ),
-    );
-  } on Exception catch (_) {
-    print('eeeeeeeeeeeeeeeeeeeeeeeeeror');
-    print(_.toString());
-  }
+      getPages: AppPages.routes,
+      // routeInformationParser: GetInformationParser(
+      //     // initialRoute: Routes.HOME,
+      //     ),
+      // routerDelegate: GetDelegate(
+      //   backButtonPopMode: PopMode.History,
+      //   preventDuplicateHandlingMode:
+      //       PreventDuplicateHandlingMode.ReorderRoutes,
+      // ),
+    ),
+  );
 }
