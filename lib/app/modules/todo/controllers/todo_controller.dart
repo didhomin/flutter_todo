@@ -13,10 +13,10 @@ class TodoController extends GetxController {
 
   late TextEditingController titleEditingController;
 
-  final now = DateTime.now();
+  final now = DateTime.now().obs;
 
-  String get todayDtm => '${now.year}년 ${now.month}월 ${now.day}일';
-  String get todayDateServerFormatted => DateFormat('yyyyMMdd').format(now);
+  String get todayDtm => '${now.value.year}년 ${now.value.month}월 ${now.value.day}일';
+  String get todayDateServerFormatted => DateFormat('yyyyMMdd').format(now.value);
 
   final todoList = <Task>[].obs;
 
@@ -26,7 +26,11 @@ class TodoController extends GetxController {
 
     titleEditingController = TextEditingController();
   }
+  void changeDtm(DateTime newDate) async {
+    now.value = newDate;
 
+    loadTodoList();
+  }
 
   void loadTodoList() async {
     final response = await todoRepository.getListByDtm(AuthService.to.user.value.seq, todayDateServerFormatted);
@@ -54,6 +58,10 @@ class TodoController extends GetxController {
     loadTodoList();
   }
 
+  copy() {
+    todoRepository.copy(AuthService.to.user.value.seq,todayDateServerFormatted);
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -65,4 +73,5 @@ class TodoController extends GetxController {
     Get.printInfo(info: 'TODO List: onClose');
     super.onClose();
   }
+
 }

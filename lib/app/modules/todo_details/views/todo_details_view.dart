@@ -18,9 +18,11 @@ class TodoDetailsView extends GetWidget<TodoDetailsController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'ProductDetailsView is working',
-              style: TextStyle(fontSize: 20),
+            Obx(() =>
+              Text(
+                '${controller.todo.value.title}',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             Text('todo seq: ${controller.todoSeq}'),
           ],

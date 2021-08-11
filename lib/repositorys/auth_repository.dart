@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_app/util/constants.dart';
 import 'package:flutter_app/util/http_helper.dart';
 import 'package:get/get_connect/connect.dart';
 // import 'package:http/http.dart';
@@ -10,7 +11,7 @@ class AuthRepository extends GetConnect {
 
   @override
   void onInit() {
-    httpClient.baseUrl = 'http://192.168.0.28:9094';
+    httpClient.baseUrl = Constants.BASE_URL;
 
   }
 
@@ -60,5 +61,15 @@ class AuthRepository extends GetConnect {
     }
   }
 
+  Future<ResponseData> getAccountList() async {
+
+    final response = await get('/api/account/list');
+
+    if (response.statusCode == 200) {
+      return ResponseData.fromJson(response.body);
+    } else {
+      throw Exception('Failed Http request getAccountList ');
+    }
+  }
 
 }

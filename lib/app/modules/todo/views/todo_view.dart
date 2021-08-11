@@ -19,11 +19,42 @@ class TodoView extends GetView<TodoController> {
       // ),
       body: Column(
         children: [
-          Text(controller.todayDtm),
-          // Hero(
-          //   tag: 'heroLogo',
-          //   child: const FlutterLogo(),
-          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Obx(() =>
+                Text(controller.todayDtm)
+              ),
+              TextButton(
+                child: const Text('수정'),
+                onPressed: () async {
+                  var newDate = await showDatePicker(
+                    context: context,
+                    initialDate: controller.now.value,
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+
+                  // Don't change the date if the date picker returns null.
+                  if (newDate == null) {
+                    return;
+                  }
+                  print('newDate : $newDate');
+                  controller.changeDtm(newDate);
+                },
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              TextButton(
+                child: const Text('복사'),
+                onPressed: () async {
+                  controller.copy();
+                },
+              ),
+            ],
+          ),
+
           Expanded(
             child: Obx(
               () => RefreshIndicator(
@@ -35,15 +66,44 @@ class TodoView extends GetView<TodoController> {
                   itemCount: controller.todoList.length,
                   itemBuilder: (context, index) {
                     final item = controller.todoList[index];
-                    return ListTile(
-                      // onTap: () {
-                      //   Get.rootDelegate
-                      //       .toNamed(Routes.TODO_DETAILS(item.seq.toString()));
-                      // },
-                      title: Text(item.title),
-                      subtitle: Text(item.date),
-                    );
+                    return
+                      Dismissible(
+                        // Each Dismissible must contain a Key. Keys allow Flutter to
+                        // uniquely identify widgets.
+                        key: Key(item.seq.toString()),
+                        direction:DismissDirection.endToStart,
+                        // Provide a function that tells the app
+                        // what to do after an item has been swiped away.
+                        onDismissed: (direction) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('$item dismissed  $direction')));
+                          controller.todoList.removeAt(index);
+                        },
+                        background: Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.centerLeft,
+                          color: Colors.green,
+                          child: Text("수정",style: TextStyle(fontSize:20)),
+                        ),
+                        secondaryBackground: Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.centerRight,
+                          color: Colors.red,
+                          child: Text("삭제",style: TextStyle(fontSize:20)),
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            print(item.seq);
+                            Get.rootDelegate
+                                .toNamed(Routes.TODO_DETAILS(item.seq.toString()));
+
+                          },
+                          title: Text(item.title),
+                          subtitle: Text(item.date),
+                        ),
+                      );
                   },
+
                 ),
               ),
             ),
