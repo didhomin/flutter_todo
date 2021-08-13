@@ -16,6 +16,7 @@ abstract class Routes {
   static String LOGIN_THEN(String afterSuccessfulLogin) =>
       '$LOGIN?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
   static const DASHBOARD = _Paths.HOME + _Paths.DASHBOARD;
+  static String TODO_USER(String userSeq) => '$DASHBOARD/$userSeq';
 }
 
 abstract class _Paths {
@@ -25,6 +26,7 @@ abstract class _Paths {
   static const HISTORY = '/history';
   static const SETTINGS = '/settings';
   static const TODO_DETAILS = '/:todoSeq';
+  static const TODO_USER = '/:userSeq';
   static const LOGIN = '/login';
   static const DASHBOARD = '/dashboard';
 }

@@ -1,24 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/todo_controller.dart';
 
 class TodoView extends GetView<TodoController> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {displayInsertWindow()},
-        tooltip: 'Insert',
-        child: Icon(Icons.add),
+
+      floatingActionButton: controller.userSeq.isNum ? null :
+        Obx(() =>
+          FloatingActionButton.extended(
+            tooltip: 'Create Card',
+            label: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                IconButton(onPressed: () {
+                  controller.floatExtended.toggle();
+                  displayTodoInsertWindow();
+                }, icon: Icon(Icons.check_box)),
+                IconButton(onPressed: () {
+                  controller.floatExtended.toggle();
+                  displayMemoInsertWindow();
+                }, icon: Icon(Icons.note)),
+
+              ],
+            ),
+            isExtended: controller.floatExtended.value,
+            icon: Icon(
+              controller.floatExtended.value == true ? Icons.close : Icons.add,
+              color: controller.floatExtended.value == true ? Colors.red : Colors.white,
+            ),
+            onPressed: () {
+              print("onpressed");
+              // controller.floatExtended.value = !controller.floatExtended.value;
+              controller.floatExtended.toggle();
+              // controller.floatExtended.refresh();
+            },
+            // backgroundColor: controller.floatExtended.value == true
+            //     ? Colors.blueGrey
+            //     : Colors.white.withOpacity(.7),
+          ),
       ),
+      //   floatingActionButton: FloatingActionButton(
+      //   onPressed: () => {displayInsertWindow()},
+      //   tooltip: 'Insert',
+      //   child: Icon(Icons.add),
+      // ),
       // floatingActionButton: FloatingActionButton.extended(
       //   onPressed: controller.loadDemoProductsFromSomeWhere,
       //   label: Text('Add'),
       // ),
       body: Column(
         children: [
+          if(Get.rootDelegate.currentConfiguration!
+              .currentPage!.arguments != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('${Get.rootDelegate.currentConfiguration!
+                    .currentPage!.arguments}')
+              ]
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -46,12 +92,13 @@ class TodoView extends GetView<TodoController> {
               SizedBox(
                 width: 5,
               ),
-              TextButton(
-                child: const Text('복사'),
-                onPressed: () async {
-                  controller.copy();
-                },
-              ),
+              if(!controller.userSeq.isNum)
+                TextButton(
+                  child: const Text('복사'),
+                  onPressed: () async {
+                    controller.todoCopy();
+                  },
+                ),
             ],
           ),
 
@@ -62,7 +109,9 @@ class TodoView extends GetView<TodoController> {
                   controller.todoList.clear();
                   controller.loadTodoList();
                 },
-                child: ListView.builder(
+                child:  controller.todoList.length == 0 ?
+                Center(child:Text('등록된 할일이 없습니다.'))
+                    : ListView.builder(
                   itemCount: controller.todoList.length,
                   itemBuilder: (context, index) {
                     final item = controller.todoList[index];
@@ -70,22 +119,16 @@ class TodoView extends GetView<TodoController> {
                       Dismissible(
                         // Each Dismissible must contain a Key. Keys allow Flutter to
                         // uniquely identify widgets.
-                        key: Key(item.seq.toString()),
-                        direction:DismissDirection.endToStart,
+                        key: Key(item.value.seq.toString()),
+                        direction: controller.userSeq.isNum ? DismissDirection.none : DismissDirection.endToStart,
                         // Provide a function that tells the app
                         // what to do after an item has been swiped away.
                         onDismissed: (direction) {
+                          controller.todoRemove(index);
                           ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text('$item dismissed  $direction')));
-                          controller.todoList.removeAt(index);
+                              .showSnackBar(SnackBar(content: Text('${item.value.title} 삭제완료.')));
                         },
                         background: Container(
-                          padding: EdgeInsets.all(10),
-                          alignment: Alignment.centerLeft,
-                          color: Colors.green,
-                          child: Text("수정",style: TextStyle(fontSize:20)),
-                        ),
-                        secondaryBackground: Container(
                           padding: EdgeInsets.all(10),
                           alignment: Alignment.centerRight,
                           color: Colors.red,
@@ -93,13 +136,84 @@ class TodoView extends GetView<TodoController> {
                         ),
                         child: ListTile(
                           onTap: () {
-                            print(item.seq);
-                            Get.rootDelegate
-                                .toNamed(Routes.TODO_DETAILS(item.seq.toString()));
+                            print(item.value.seq);
+                            // controller.setEditMode(index);
+                            if(!controller.userSeq.isNum) {
+                              Get.rootDelegate
+                                  .toNamed(Routes.TODO_DETAILS(item.value.seq.toString()));
+                            }
 
                           },
-                          title: Text(item.title),
-                          subtitle: Text(item.date),
+                          onLongPress: (){
+                            Clipboard.setData(new ClipboardData(text:item.value.title));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text('\'${item.value.title}\' 복사완료.')));
+                          },
+                          title: Text(item.value.title,style : item.value.isCheck ? TextStyle(decoration: TextDecoration.lineThrough): null),
+                          // subtitle: Text(item.value.date),
+                          leading: Checkbox(
+                            value: item.value.isCheck,
+                            onChanged: (value) {
+                              if(!controller.userSeq.isNum) {
+                                controller.toggleCheckYn(index);
+                              }
+                            },
+                          ),
+                        ),
+                      );
+                  },
+
+                ),
+              ),
+            ),
+          ),
+          Divider(),
+          Expanded(
+            child: Obx(
+                  () => RefreshIndicator(
+                onRefresh: () async {
+                  controller.memoList.clear();
+                  controller.loadMemoList();
+                },
+                child: controller.memoList.length == 0 ?
+                Center(child:Text('등록된 메모가 없습니다.'))
+                  : ListView.builder(
+                  itemCount: controller.memoList.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.memoList[index];
+                    return
+                      Dismissible(
+                        // Each Dismissible must contain a Key. Keys allow Flutter to
+                        // uniquely identify widgets.
+                        key: Key(item.value.seq.toString()),
+                        direction: controller.userSeq.isNum ? DismissDirection.none : DismissDirection.endToStart,
+                        // Provide a function that tells the app
+                        // what to do after an item has been swiped away.
+                        onDismissed: (direction) {
+                          controller.memoRemove(index);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('${item.value.contents} 삭제완료.')));
+                        },
+                        background: Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: Alignment.centerRight,
+                          color: Colors.red,
+                          child: Text("삭제",style: TextStyle(fontSize:20)),
+                        ),
+                        child: ListTile(
+                          // onTap: () {
+                          //   print(item.value.seq);
+                          //   // controller.setEditMode(index);
+                          //   Get.rootDelegate
+                          //       .toNamed(Routes.TODO_DETAILS(item.value.seq.toString()));
+                          //
+                          // },
+                          onLongPress: (){
+                            Clipboard.setData(new ClipboardData(text:item.value.contents));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text('\'${item.value.contents}\' 복사완료.')));
+                          },
+                          title: Text("• "+item.value.contents),
                         ),
                       );
                   },
@@ -113,7 +227,7 @@ class TodoView extends GetView<TodoController> {
     );
   }
 
-  void displayInsertWindow() {
+  void displayTodoInsertWindow() {
     Get.bottomSheet(
       Container(
         child: Padding(
@@ -163,7 +277,49 @@ class TodoView extends GetView<TodoController> {
                     ElevatedButton(
                       child: Text('등록'),
                       onPressed:  () async {
-                        await controller.register();
+                        await controller.todoRegister();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            )),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(16),
+              topLeft: Radius.circular(16),
+            ),
+            color: Colors.white),
+      ),
+    );
+  }
+
+  void displayMemoInsertWindow() {
+    Get.bottomSheet(
+      Container(
+        child: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+            child: ListView(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: '내용',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      controller: controller.titleEditingController,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    ElevatedButton(
+                      child: Text('등록'),
+                      onPressed:  () async {
+                        await controller.memoRegister();
                       },
                     ),
                   ],

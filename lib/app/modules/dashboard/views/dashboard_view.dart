@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 import '../controllers/dashboard_controller.dart';
@@ -28,11 +29,11 @@ class DashboardView extends GetView<DashboardController> {
                     itemBuilder: (context, index) {
                       final item = controller.accountList[index];
                       return ListTile(
-                        // onTap: () {
-                        //   Get.rootDelegate
-                        //       .toNamed(Routes.TODO_DETAILS(item.seq.toString()));
-                        // },
-                        title: Text(item.id),
+                        onTap: () {
+                          Get.rootDelegate
+                              .toNamed(Routes.TODO_USER(item.seq.toString()),arguments: item);
+                        },
+                        title: Text("${item.id} [ 완료: ${item.todayTodoCheckedCount } / Total: ${item.todayTodoTotalCount} ]"),
                         subtitle: Text(item.nickname??''),
                       );
                     },

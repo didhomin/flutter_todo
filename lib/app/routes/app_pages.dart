@@ -1,3 +1,4 @@
+import 'package:flutter_app/models/user.dart';
 import 'package:get/get.dart';
 
 import '../middleware/auth_middleware.dart';
@@ -61,6 +62,19 @@ class AppPages {
               title: 'Dashboard',
               page: () => DashboardView(),
               binding: DashboardBinding(),
+              children: [
+                GetPage(
+                  name: _Paths.TODO_USER,
+                  page: () => TodoView(),
+                  title: 'TODO',
+                  transition: Transition.zoom,
+                  binding: TodoBinding(),
+                  middlewares: [
+                    //only enter this route when authed
+                    EnsureAuthMiddleware(),
+                  ],
+                ),
+              ],
             ),
             GetPage(
               middlewares: [

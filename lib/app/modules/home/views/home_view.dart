@@ -52,10 +52,10 @@ class HomeView extends GetView<HomeController> {
                 label: 'TODO',
               ),
               // _Paths.HOME + _Paths.PRODUCTS
-              BottomNavigationBarItem(
-                icon: Icon(Icons.work_outlined),
-                label: 'History',
-              ),
+              // BottomNavigationBarItem(
+              //   icon: Icon(Icons.work_outlined),
+              //   label: 'History',
+              // ),
             ],
           ),
         );

@@ -20,7 +20,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
       'seq': instance.seq,
-      'isCheck': instance.isCheck,
+      'checkYn': instance.isCheck ? 1 : 0,
       'title': instance.title,
     };
 
