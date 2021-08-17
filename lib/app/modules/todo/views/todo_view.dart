@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/models/memo.dart';
+import 'package:flutter_app/models/task.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
@@ -20,11 +22,11 @@ class TodoView extends GetView<TodoController> {
               children: [
                 IconButton(onPressed: () {
                   controller.floatExtended.toggle();
-                  displayTodoInsertWindow();
+                  displayTodoInsertWindow(Task(title: ''));
                 }, icon: Icon(Icons.check_box)),
                 IconButton(onPressed: () {
                   controller.floatExtended.toggle();
-                  displayMemoInsertWindow();
+                  displayMemoInsertWindow(Memo(contents: ''));
                 }, icon: Icon(Icons.note)),
 
               ],
@@ -72,7 +74,7 @@ class TodoView extends GetView<TodoController> {
                 Text(controller.todayDtm)
               ),
               TextButton(
-                child: const Text('수정'),
+                  child: const Text('날짜변경'),
                 onPressed: () async {
                   var newDate = await showDatePicker(
                     context: context,
@@ -89,19 +91,36 @@ class TodoView extends GetView<TodoController> {
                   controller.changeDtm(newDate);
                 },
               ),
-              SizedBox(
-                width: 5,
-              ),
-              if(!controller.userSeq.isNum)
+            ],
+          ),
+          if(!controller.userSeq.isNum)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('다음날로  '),
+                Obx(
+                  () => DropdownButton(
+                    value: controller.selectedOption.value,
+                    items: controller.optionList.map(
+                      (option){
+                        return DropdownMenuItem(
+                          value: option.code,
+                          child: Text(option.label),
+                        );
+                    }).toList(),
+                  onChanged: (value) {
+                    controller.selectedOption.value = value.toString();
+                  },
+                )),
                 TextButton(
                   child: const Text('복사'),
                   onPressed: () async {
                     controller.todoCopy();
                   },
                 ),
-            ],
-          ),
-
+                Tooltip(message: '다음날로 복사하는 기능입니다. 전체복사 , 체크된것만복사 , 미체크된것만복사 총 세가지 옵션이 있습니다.',child: Icon(Icons.info_rounded))
+              ],
+            ),
           Expanded(
             child: Obx(
               () => RefreshIndicator(
@@ -136,13 +155,9 @@ class TodoView extends GetView<TodoController> {
                         ),
                         child: ListTile(
                           onTap: () {
-                            print(item.value.seq);
-                            // controller.setEditMode(index);
                             if(!controller.userSeq.isNum) {
-                              Get.rootDelegate
-                                  .toNamed(Routes.TODO_DETAILS(item.value.seq.toString()));
+                              displayTodoInsertWindow(item.value);
                             }
-
                           },
                           onLongPress: (){
                             Clipboard.setData(new ClipboardData(text:item.value.title));
@@ -201,13 +216,11 @@ class TodoView extends GetView<TodoController> {
                           child: Text("삭제",style: TextStyle(fontSize:20)),
                         ),
                         child: ListTile(
-                          // onTap: () {
-                          //   print(item.value.seq);
-                          //   // controller.setEditMode(index);
-                          //   Get.rootDelegate
-                          //       .toNamed(Routes.TODO_DETAILS(item.value.seq.toString()));
-                          //
-                          // },
+                          onTap: () {
+                            if(!controller.userSeq.isNum) {
+                              displayMemoInsertWindow(item.value);
+                            }
+                          },
                           onLongPress: (){
                             Clipboard.setData(new ClipboardData(text:item.value.contents));
                             ScaffoldMessenger.of(context)
@@ -227,7 +240,9 @@ class TodoView extends GetView<TodoController> {
     );
   }
 
-  void displayTodoInsertWindow() {
+  void displayTodoInsertWindow(Task task) {
+    controller.titleEditingController.text = task.title;
+
     Get.bottomSheet(
       Container(
         child: Padding(
@@ -274,12 +289,20 @@ class TodoView extends GetView<TodoController> {
                     // SizedBox(
                     //   height: 8,
                     // ),
-                    ElevatedButton(
-                      child: Text('등록'),
-                      onPressed:  () async {
-                        await controller.todoRegister();
-                      },
-                    ),
+                    task.seq == -1 ?
+                      ElevatedButton(
+                        child: Text('등록'),
+                        onPressed:  () async {
+                          await controller.todoRegister();
+                        },
+                      )
+                      :
+                      ElevatedButton(
+                        child: Text('수정'),
+                        onPressed:  () async {
+                          await controller.todoModify(task);
+                        },
+                      ),
                   ],
                 ),
               ],
@@ -294,7 +317,8 @@ class TodoView extends GetView<TodoController> {
     );
   }
 
-  void displayMemoInsertWindow() {
+  void displayMemoInsertWindow(Memo memo) {
+    controller.titleEditingController.text = memo.contents;
     Get.bottomSheet(
       Container(
         child: Padding(
@@ -316,12 +340,20 @@ class TodoView extends GetView<TodoController> {
                     SizedBox(
                       height: 8,
                     ),
-                    ElevatedButton(
-                      child: Text('등록'),
-                      onPressed:  () async {
-                        await controller.memoRegister();
-                      },
-                    ),
+                    memo.seq == -1 ?
+                      ElevatedButton(
+                        child: Text('등록'),
+                        onPressed:  () async {
+                          await controller.memoRegister();
+                        },
+                      )
+                      :
+                      ElevatedButton(
+                        child: Text('수정'),
+                        onPressed:  () async {
+                          await controller.memoModify(memo);
+                        },
+                      ),
                   ],
                 ),
               ],

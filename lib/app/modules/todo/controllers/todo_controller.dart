@@ -1,3 +1,4 @@
+import 'package:flutter_app/models/code.dart';
 import 'package:flutter_app/models/memo.dart';
 import 'package:flutter_app/models/task.dart';
 import 'package:flutter_app/models/user.dart';
@@ -29,6 +30,8 @@ class TodoController extends GetxController {
   final todoList = <Rx<Task>>[].obs;
   final memoList = <Rx<Memo>>[].obs;
 
+  final optionList = [Code('-1','전체'),Code('1','완료'),Code('0','미완')];
+  final selectedOption = '-1'.obs;
   int editModeIndex = -1;
 
   @override
@@ -55,6 +58,7 @@ class TodoController extends GetxController {
     now.value = newDate;
 
     loadTodoList();
+    loadMemoList();
   }
 
   void loadTodoList() async {
@@ -95,8 +99,26 @@ class TodoController extends GetxController {
     // loadTodoList();
   }
 
+
+  todoModify(Task todo) async {
+    todo.title = titleEditingController.text;
+
+    await todoRepository.update(todo);
+
+    titleEditingController.clear();
+
+    Get.back();
+    todoList.forEach((element) {
+      if(todo.seq == element.value.seq) {
+        element.value.title = todo.title;
+      }
+    });
+    todoList.refresh();
+
+  }
+
   todoCopy() {
-    todoRepository.copy(AuthService.to.user.value.seq,todayDateServerFormatted);
+    todoRepository.copy(AuthService.to.user.value.seq,todayDateServerFormatted,checkYn: selectedOption.value);
   }
 
   todoRemove(int index) async {
@@ -135,6 +157,23 @@ class TodoController extends GetxController {
 
     memoList.add(memo.obs);
     // loadMemoList();
+  }
+
+  memoModify(Memo memo) async {
+    memo.contents = titleEditingController.text;
+
+    await memoRepository.update(memo);
+
+    titleEditingController.clear();
+
+    Get.back();
+    memoList.forEach((element) {
+      if(memo.seq == element.value.seq) {
+        element.value.contents = memo.contents;
+      }
+    });
+    memoList.refresh();
+
   }
 
   memoRemove(int index) async {

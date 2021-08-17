@@ -13,36 +13,53 @@ class LoginView extends GetView<LoginController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: '아이디',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+            Padding(
+              padding: EdgeInsets.all(4.0),
+              child:  TextField(
+                decoration: InputDecoration(
+                  labelText: '아이디',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
+                controller: controller.idEditingController,
               ),
-              controller: controller.idEditingController,
             ),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: '비밀번호',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+            Padding(
+              padding: EdgeInsets.all(4.0),
+              child:  TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: '비밀번호',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
+                controller: controller.passwordEditingController,
               ),
-              controller: controller.passwordEditingController,
             ),
-            ElevatedButton(
-              child: Text('로그인'),
-              onPressed:  () async {
-                await controller.login();
-              },
-            ),
-            ElevatedButton(
-              child: Text('회원가입'),
-              onPressed:  () async {
-                displayEditTaskWindow();
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    child: Text('로그인'),
+                    onPressed:  () async {
+                      await controller.login();
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    child: Text('회원가입'),
+                    onPressed:  () async {
+                      displayEditTaskWindow();
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),

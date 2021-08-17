@@ -74,7 +74,7 @@ class TodoRepository extends GetConnect {
     }
   }
 
-  Future<ResponseData> copy(int userSeq,String dateDtm,{int checkYn = -1 }) async {
+  Future<ResponseData> copy(int userSeq,String dateDtm,{String checkYn = '-1' }) async {
     final body = <String, dynamic>{
       'userSeq': userSeq,
       'checkYn': checkYn,
