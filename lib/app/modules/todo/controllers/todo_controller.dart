@@ -64,23 +64,15 @@ class TodoController extends GetxController {
   void loadTodoList() async {
     final response = await todoRepository.getListByDtm(userSeq.isNum ? int.parse(userSeq) : AuthService.to.user.value.seq , todayDateServerFormatted);
 
-    print('responseData ${response.toString()}');
     if (response.success == 'true') {
-      print('response.response ::: ${response.response}');
-
       todoList.value = List<Rx<Task>>.from(response.response.map((x) => Task.fromJson(x).obs));
-
-      // todoList.value  = Task.fromJson(response.response!);
-
     }
   }
 
   void loadMemoList() async {
     final response = await memoRepository.getListByDtm(AuthService.to.user.value.seq, todayDateServerFormatted);
 
-    print('responseData ${response.toString()}');
     if (response.success == 'true') {
-      print('response.response ::: ${response.response}');
       memoList.value = List<Rx<Memo>>.from(response.response.map((x) => Memo.fromJson(x).obs));
     }
   }
@@ -90,13 +82,9 @@ class TodoController extends GetxController {
     final todo = Task.insert(userSeq.isNum ? int.parse(userSeq) : AuthService.to.user.value.seq,titleEditingController.text,todayDateServerFormatted);
     await todoRepository.insert(todo);
     titleEditingController.clear();
-    // final thenTo = Get.rootDelegate.currentConfiguration!
-    //     .currentPage!.parameters?['then'];
-    // Get.rootDelegate.offNamed(thenTo ?? Routes.HOME);
     Get.back();
 
     todoList.add(todo.obs);
-    // loadTodoList();
   }
 
 
@@ -141,7 +129,6 @@ class TodoController extends GetxController {
   }
 
   void setEditMode(int index) {
-    print(index);
     this.editModeIndex = index;
     todoList.refresh();
   }
@@ -150,13 +137,9 @@ class TodoController extends GetxController {
     final memo = Memo.insert(AuthService.to.user.value.seq,titleEditingController.text,todayDateServerFormatted);
     await memoRepository.insert(memo);
     titleEditingController.clear();
-    // final thenTo = Get.rootDelegate.currentConfiguration!
-    //     .currentPage!.parameters?['then'];
-    // Get.rootDelegate.offNamed(thenTo ?? Routes.HOME);
     Get.back();
 
     memoList.add(memo.obs);
-    // loadMemoList();
   }
 
   memoModify(Memo memo) async {

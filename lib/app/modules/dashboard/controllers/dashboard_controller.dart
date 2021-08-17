@@ -28,14 +28,8 @@ class DashboardController extends GetxController {
   void loadAccountList() async {
     final response = await authRepository.getAccountList();
 
-    print('responseData ${response.toString()}');
     if (response.success == 'true') {
-      print('response.response ::: ${response.response}');
-
       accountList.value = List<User>.from(response.response.map((x) => User.fromJson(x)));
-
-      // todoList.value  = Task.fromJson(response.response!);
-
     }
   }
 

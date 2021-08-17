@@ -17,14 +17,10 @@ class AuthRepository extends GetConnect {
 
   Future<ResponseData> join(User user) async {
 
-    print('httpClient.baseUrl :: $httpClient.baseUrl');
     var body = json.encode(user.toJson());
-    print('body :: $body');
+
     final response = await post('/api/auth/join', body);
 
-    print('response :: $response');
-    print('response.statusCode :: ${response.statusCode}');
-    print('response.body :: ${response.body}');
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
     } else {
@@ -34,14 +30,12 @@ class AuthRepository extends GetConnect {
 
 
   Future<ResponseData> logIn(String id,String password) async {
-    print('login');
-    print('httpClient.baseUrl :: ${httpClient.baseUrl}');
+
     User loginData = User.login(id,password);
     var body = json.encode(loginData.toJson());
 
     final response = await post('/api/auth/login', body);
-    print('response :: ${response.statusCode}');
-    print('response :: ${response.body}');
+
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
     } else {

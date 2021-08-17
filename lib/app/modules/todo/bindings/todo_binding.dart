@@ -8,9 +8,6 @@ class TodoBinding extends Bindings {
   @override
   void dependencies() {
 
-    print('asdasdasd');
-    print(Get.parameters['userSeq']);
-    print(Get.parameters);
     Get.lazyPut<TodoRepository>(
         ()=>TodoRepository()
     );

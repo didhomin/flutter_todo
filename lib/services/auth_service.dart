@@ -19,10 +19,8 @@ class AuthService extends GetxService {
   bool get isLoggedInValue => isLoggedIn.value;
 
   Future<bool> join(User newUser) async {
-    print('register');
-
     ResponseData responseData = await authRepository.join(newUser);
-    print('responseData ${responseData.toString()}');
+
     if (responseData.success == 'true') {
       return true;
     }
@@ -30,10 +28,9 @@ class AuthService extends GetxService {
   }
 
   Future<bool> login(String id,String password) async {
-    print('login');
 
     ResponseData responseData = await authRepository.logIn(id, password);
-    print('responseData ${responseData.toString()}');
+
     if (responseData.success == 'true') {
       user.value  = User.fromJson(responseData.response!);
       if (user.value.seq > 0) {

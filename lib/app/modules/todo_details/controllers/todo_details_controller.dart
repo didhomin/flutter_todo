@@ -19,14 +19,8 @@ class TodoDetailsController extends GetxController {
   void loadTodo() async {
     final response = await todoRepository.getDetail(this.todoSeq);
 
-    print('responseData ${response.toString()}');
     if (response.success == 'true') {
-      print('response.response ::: ${response.response}');
-
       todo.value = Task.fromJson(response.response);
-
-      // todoList.value  = Task.fromJson(response.response!);
-
     }
   }
 }

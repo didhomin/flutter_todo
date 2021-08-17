@@ -19,14 +19,8 @@ class MemoRepository extends GetConnect {
 
   Future<ResponseData> getListByDtm(int userSeq, String dtm) async {
 
-    print('httpClient.baseUrl :: $httpClient.baseUrl');
-
-
     final response = await get('/api/memo/list/$userSeq/$dtm');
 
-    print('response :: $response');
-    print('response.statusCode :: ${response.statusCode}');
-    print('response.body :: ${response.body}');
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
     } else {
@@ -36,10 +30,8 @@ class MemoRepository extends GetConnect {
 
   Future<ResponseData> insert(Memo memo) async {
     final body = memo.toJson();
-    print('insert body :: $body');
     final response = await post('/api/memo/insert', body);
-    print('response :: ${response.statusCode}');
-    print('response :: ${response.body}');
+
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
     } else {
@@ -50,10 +42,8 @@ class MemoRepository extends GetConnect {
 
   Future<ResponseData> update(Memo memo) async {
     final body = memo.toJson();
-    print('update body :: $body');
     final response = await put('/api/memo/update/${memo.seq}', body);
-    print('response :: ${response.statusCode}');
-    print('response :: ${response.body}');
+
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
     } else {
@@ -64,8 +54,7 @@ class MemoRepository extends GetConnect {
   Future<ResponseData> remove(int memoSeq) async {
 
     final response = await delete('/api/memo/delete/$memoSeq');
-    print('response :: ${response.statusCode}');
-    print('response :: ${response.body}');
+
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
     } else {

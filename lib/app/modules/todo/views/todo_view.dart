@@ -37,25 +37,10 @@ class TodoView extends GetView<TodoController> {
               color: controller.floatExtended.value == true ? Colors.red : Colors.white,
             ),
             onPressed: () {
-              print("onpressed");
-              // controller.floatExtended.value = !controller.floatExtended.value;
               controller.floatExtended.toggle();
-              // controller.floatExtended.refresh();
             },
-            // backgroundColor: controller.floatExtended.value == true
-            //     ? Colors.blueGrey
-            //     : Colors.white.withOpacity(.7),
           ),
       ),
-      //   floatingActionButton: FloatingActionButton(
-      //   onPressed: () => {displayInsertWindow()},
-      //   tooltip: 'Insert',
-      //   child: Icon(Icons.add),
-      // ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: controller.loadDemoProductsFromSomeWhere,
-      //   label: Text('Add'),
-      // ),
       body: Column(
         children: [
           if(Get.rootDelegate.currentConfiguration!
@@ -90,7 +75,6 @@ class TodoView extends GetView<TodoController> {
                   if (newDate == null) {
                     return;
                   }
-                  print('newDate : $newDate');
                   controller.changeDtm(newDate);
                 },
               ),
@@ -270,31 +254,6 @@ class TodoView extends GetView<TodoController> {
                     SizedBox(
                       height: 8,
                     ),
-                    // TextField(
-                    //   decoration: InputDecoration(
-                    //     labelText: '닉네임',
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(8),
-                    //     ),
-                    //   ),
-                    //   controller: controller.joinNicknameEditingController,
-                    // ),
-                    // SizedBox(
-                    //   height: 8,
-                    // ),
-                    // TextField(
-                    //   obscureText: true,
-                    //   decoration: InputDecoration(
-                    //     labelText: '비밀번호',
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(8),
-                    //     ),
-                    //   ),
-                    //   controller: controller.joinPasswordEditingController,
-                    // ),
-                    // SizedBox(
-                    //   height: 8,
-                    // ),
                     task.seq == -1 ?
                       ElevatedButton(
                         child: Text('등록'),
