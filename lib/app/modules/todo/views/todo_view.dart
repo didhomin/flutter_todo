@@ -70,6 +70,9 @@ class TodoView extends GetView<TodoController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              IconButton(onPressed: () {
+                controller.changeDtm(controller.now.value.add(const Duration(days: -1)));
+              }, icon: Icon(Icons.keyboard_arrow_left)),
               Obx(() =>
                 Text(controller.todayDtm)
               ),
@@ -91,6 +94,9 @@ class TodoView extends GetView<TodoController> {
                   controller.changeDtm(newDate);
                 },
               ),
+              IconButton(onPressed: () {
+                controller.changeDtm(controller.now.value.add(const Duration(days: 1)));
+              }, icon: Icon(Icons.keyboard_arrow_right)),
             ],
           ),
           if(!controller.userSeq.isNum)
