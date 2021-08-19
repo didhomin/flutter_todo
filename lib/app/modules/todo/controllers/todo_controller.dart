@@ -70,7 +70,7 @@ class TodoController extends GetxController {
   }
 
   void loadMemoList() async {
-    final response = await memoRepository.getListByDtm(AuthService.to.user.value.seq, todayDateServerFormatted);
+    final response = await memoRepository.getListByDtm(userSeq.isNum ? int.parse(userSeq) : AuthService.to.user.value.seq , todayDateServerFormatted);
 
     if (response.success == 'true') {
       memoList.value = List<Rx<Memo>>.from(response.response.map((x) => Memo.fromJson(x).obs));

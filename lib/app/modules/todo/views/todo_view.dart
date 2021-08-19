@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/todo_controller.dart';
 
-class TodoView extends GetView<TodoController> {
+class TodoView extends GetWidget<TodoController> {
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +16,14 @@ class TodoView extends GetView<TodoController> {
       floatingActionButton: controller.userSeq.isNum ? null :
         Obx(() =>
           FloatingActionButton.extended(
-            tooltip: 'Create Card',
             label: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(onPressed: () {
+                IconButton(tooltip: '할일등록', onPressed: () {
                   controller.floatExtended.toggle();
                   displayTodoInsertWindow(Task(title: ''));
                 }, icon: Icon(Icons.check_box)),
-                IconButton(onPressed: () {
+                IconButton(tooltip: '메모등록',onPressed: () {
                   controller.floatExtended.toggle();
                   displayMemoInsertWindow(Memo(contents: ''));
                 }, icon: Icon(Icons.note)),
@@ -71,7 +70,6 @@ class TodoView extends GetView<TodoController> {
                     lastDate: DateTime(2100),
                   );
 
-                  // Don't change the date if the date picker returns null.
                   if (newDate == null) {
                     return;
                   }

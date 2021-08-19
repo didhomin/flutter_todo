@@ -15,12 +15,18 @@ class TodoBinding extends Bindings {
             ()=>MemoRepository()
     );
 
-    Get.delete<TodoController>();
-    Get.put<TodoController>(
-      TodoController(
-          Get.parameters['userSeq'] ?? '',
-          Get.find(),
-          Get.find()),
+    // Get.delete<TodoController>();
+    Get.create<TodoController>(
+          () => TodoController(
+              Get.parameters['userSeq'] ?? '',
+              Get.find(),
+              Get.find()),
     );
+    // Get.put<TodoController>(
+    //   TodoController(
+    //       Get.parameters['userSeq'] ?? '',
+    //       Get.find(),
+    //       Get.find()),
+    // );
   }
 }

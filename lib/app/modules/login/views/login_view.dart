@@ -14,7 +14,7 @@ class LoginView extends GetView<LoginController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: EdgeInsets.all(4.0),
+              padding: GetPlatform.isDesktop ? EdgeInsets.symmetric(vertical: 5.0,horizontal: 500.0) : EdgeInsets.symmetric(vertical: 2.0,horizontal: 5.0),
               child:  TextField(
                 decoration: InputDecoration(
                   labelText: '아이디',
@@ -26,7 +26,7 @@ class LoginView extends GetView<LoginController> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(4.0),
+              padding: GetPlatform.isDesktop ? EdgeInsets.symmetric(vertical: 5.0,horizontal: 500.0) : EdgeInsets.symmetric(vertical: 2.0,horizontal: 5.0),
               child:  TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -38,11 +38,14 @@ class LoginView extends GetView<LoginController> {
                 controller: controller.passwordEditingController,
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(4.0),
                   child: ElevatedButton(
                     child: Text('로그인'),
                     onPressed:  () async {
@@ -51,7 +54,7 @@ class LoginView extends GetView<LoginController> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(4.0),
                   child: ElevatedButton(
                     child: Text('회원가입'),
                     onPressed:  () async {
