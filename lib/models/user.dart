@@ -9,6 +9,7 @@ class User {
   final String? nickname;
   final int? todayTodoTotalCount;
   final int? todayTodoCheckedCount;
+  final String? tokenId;
 
   const User(
     this.seq,
@@ -18,17 +19,18 @@ class User {
     this.password = '',
     this.todayTodoTotalCount = 0,
     this.todayTodoCheckedCount = 0,
+    this.tokenId = null
   });
 
   const User.join(
       this.id,
       this.password,{
       this.nickname = ''
-  }) : this.seq = -1, this.todayTodoTotalCount = 0, this.todayTodoCheckedCount =0;
+  }) : this.seq = -1, this.todayTodoTotalCount = 0, this.todayTodoCheckedCount =0, this.tokenId = null;
 
   const User.login(
       this.id,
-      this.password) : this.seq = -1,this.nickname = '', this.todayTodoTotalCount = 0, this.todayTodoCheckedCount =0;
+      this.password) : this.seq = -1,this.nickname = '', this.todayTodoTotalCount = 0, this.todayTodoCheckedCount =0, this.tokenId = null;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

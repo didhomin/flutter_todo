@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_app/models/memo.dart';
 import 'package:flutter_app/models/task.dart';
+import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/util/constants.dart';
 import 'package:flutter_app/util/http_helper.dart';
 import 'package:get/get_connect/connect.dart';
@@ -14,12 +16,16 @@ class MemoRepository extends GetConnect {
   @override
   void onInit() {
     httpClient.baseUrl = Constants.BASE_URL;
+  }
 
+  Map<String, String> getHeader() {
+    return {"Authorization": "Bearer ${AuthService.to.user.value.tokenId}"};
   }
 
   Future<ResponseData> getListByDtm(int userSeq, String dtm) async {
 
-    final response = await get('/api/memo/list/$userSeq/$dtm');
+    final response = await get('/api/memo/list/$userSeq/$dtm'
+        , headers: getHeader());
 
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
@@ -30,7 +36,9 @@ class MemoRepository extends GetConnect {
 
   Future<ResponseData> insert(Memo memo) async {
     final body = memo.toJson();
-    final response = await post('/api/memo/insert', body);
+    final response = await post('/api/memo/insert'
+        , body
+        , headers: getHeader());
 
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
@@ -42,7 +50,9 @@ class MemoRepository extends GetConnect {
 
   Future<ResponseData> update(Memo memo) async {
     final body = memo.toJson();
-    final response = await put('/api/memo/update/${memo.seq}', body);
+    final response = await put('/api/memo/update/${memo.seq}'
+        , body
+        , headers: getHeader());
 
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
@@ -53,7 +63,8 @@ class MemoRepository extends GetConnect {
 
   Future<ResponseData> remove(int memoSeq) async {
 
-    final response = await delete('/api/memo/delete/$memoSeq');
+    final response = await delete('/api/memo/delete/$memoSeq'
+        , headers: getHeader());
 
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);

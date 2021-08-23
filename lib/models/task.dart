@@ -15,6 +15,7 @@ class Task {
   final int seq;
   int userSeq;
   bool isCheck;
+  bool isPublic;
   String title;
   String date;
   // String contents;
@@ -25,7 +26,8 @@ class Task {
     this.userSeq = -1,
     required this.title,
     this.date = '',
-    this.isCheck = false
+    this.isCheck = false,
+    this.isPublic = true
   });
 
   Task.insert(
@@ -34,7 +36,8 @@ class Task {
     this.date,
   {
     this.seq = -1,
-    this.isCheck = false
+    this.isCheck = false,
+    this.isPublic = true
   });
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);

@@ -12,6 +12,7 @@ Memo _$MemoFromJson(Map<String, dynamic> json) {
     userSeq: json['userSeq'] as int,
     contents: json['contents'] as String,
     date: json['date'] as String,
+    isPublic: json['publicYn'] as bool,
   );
 }
 
@@ -20,10 +21,5 @@ Map<String, dynamic> _$MemoToJson(Memo instance) => <String, dynamic>{
       'userSeq': instance.userSeq,
       'contents': instance.contents,
       'date': instance.date,
+      'publicYn': instance.isPublic,
     };
-
-Map<String, dynamic> _$MemoToJoinJson(Memo instance) => <String, dynamic>{
-  'userSeq': instance.userSeq,
-  'contents': instance.contents,
-  'date': instance.date,
-};

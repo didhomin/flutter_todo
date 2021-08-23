@@ -14,6 +14,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
     password: json['password'] as String?,
     todayTodoTotalCount : json['todayTodoTotalCount'] as int?,
     todayTodoCheckedCount : json['todayTodoCheckedCount'] as int?,
+    tokenId: json['tokenId'] as String?,
   );
 }
 

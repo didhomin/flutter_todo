@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/todo_controller.dart';
 
-class TodoView extends GetWidget<TodoController> {
+class TodoView extends GetView<TodoController> {
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +152,13 @@ class TodoView extends GetWidget<TodoController> {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(SnackBar(content: Text('\'${item.value.title}\' 복사완료.')));
                           },
-                          title: Text(item.value.title,style : item.value.isCheck ? TextStyle(decoration: TextDecoration.lineThrough): null),
+                          title: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            children: [
+                              Text(item.value.title,style : item.value.isCheck ? TextStyle(decoration: TextDecoration.lineThrough): null),
+                              if(!item.value.isPublic)Icon(Icons.lock),
+                            ],
+                          ),
                           // subtitle: Text(item.value.date),
                           leading: Checkbox(
                             value: item.value.isCheck,
@@ -204,6 +210,7 @@ class TodoView extends GetWidget<TodoController> {
                           child: Text("삭제",style: TextStyle(fontSize:20)),
                         ),
                         child: ListTile(
+                          // tileColor: Color.fromARGB(102, 173, 255, 150),
                           onTap: () {
                             if(!controller.userSeq.isNum) {
                               displayMemoInsertWindow(item.value);
@@ -214,7 +221,13 @@ class TodoView extends GetWidget<TodoController> {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(SnackBar(content: Text('\'${item.value.contents}\' 복사완료.')));
                           },
-                          title: Text("• "+item.value.contents),
+                          title: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            children: [
+                              Text("• "+item.value.contents),
+                              if(!item.value.isPublic)Icon(Icons.lock),
+                            ],
+                          ),
                         ),
                       );
                   },
@@ -230,6 +243,7 @@ class TodoView extends GetWidget<TodoController> {
 
   void displayTodoInsertWindow(Task task) {
     controller.titleEditingController.text = task.title;
+    controller.isSecret.value = !task.isPublic;
 
     Get.bottomSheet(
       Container(
@@ -249,6 +263,20 @@ class TodoView extends GetWidget<TodoController> {
                       ),
                       controller: controller.titleEditingController,
                     ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(children: [
+                      Text('비공개'),
+                      Obx(()=>
+                          Checkbox(
+                            value: controller.isSecret.value,
+                            onChanged: (value) {
+                              controller.isSecret.toggle();
+                            },
+                          ),
+                      ),
+                    ],),
                     SizedBox(
                       height: 8,
                     ),
@@ -282,6 +310,7 @@ class TodoView extends GetWidget<TodoController> {
 
   void displayMemoInsertWindow(Memo memo) {
     controller.titleEditingController.text = memo.contents;
+    controller.isSecret.value = !memo.isPublic;
     Get.bottomSheet(
       Container(
         child: Padding(
@@ -300,6 +329,20 @@ class TodoView extends GetWidget<TodoController> {
                       ),
                       controller: controller.titleEditingController,
                     ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(children: [
+                      Text('비공개'),
+                      Obx(()=>
+                        Checkbox(
+                          value: controller.isSecret.value,
+                          onChanged: (value) {
+                            controller.isSecret.toggle();
+                          },
+                        ),
+                      ),
+                    ],),
                     SizedBox(
                       height: 8,
                     ),

@@ -16,12 +16,14 @@ class Memo {
   int userSeq;
   String contents;
   String date;
+  bool isPublic;
 
   Memo({
     this.seq = -1,
     this.userSeq = -1,
     this.contents = '',
     this.date = '',
+    this.isPublic = true,
   });
 
   Memo.insert(
@@ -30,6 +32,7 @@ class Memo {
     this.date,
   {
     this.seq = -1,
+    this.isPublic = true
   });
 
   factory Memo.fromJson(Map<String, dynamic> json) => _$MemoFromJson(json);

@@ -6,5 +6,5 @@ import 'package:flutter_app/models/user.dart';
 
 class Constants {
   static String BASE_URL = "http://211.118.107.202:18524";
-
+  // static String BASE_URL = "http://192.168.1.3:9094";
 }

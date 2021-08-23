@@ -6,7 +6,7 @@ import 'package:flutter_app/models/user.dart';
 
 class HttpHelper {
   static Client _client = Client();
-  static String _host = "192.168.0.28:9094";
+  static String _host = "localhost:9094";
 
   static Map<String,String> _headers = {
     'Content-type' : 'application/json',
@@ -24,9 +24,9 @@ class HttpHelper {
     }
   }
 
-  static Future<ResponseData> get(String path, Map<String, dynamic>? queryParameters ) async {
+  static Future<ResponseData> get(String path, Map<String, dynamic>? queryParameters, Map<String, String>? headers ) async {
 
-    final response = await _client.get(Uri.http(_host,path,queryParameters),headers: _headers);
+    final response = await _client.get(Uri.http(_host,path,queryParameters),headers: headers);
 
     if (response.statusCode == 200) {
       return ResponseData.fromJson(json.decode(response.body));

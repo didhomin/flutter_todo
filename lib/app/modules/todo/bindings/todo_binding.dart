@@ -16,17 +16,17 @@ class TodoBinding extends Bindings {
     );
 
     // Get.delete<TodoController>();
-    Get.create<TodoController>(
-          () => TodoController(
-              Get.parameters['userSeq'] ?? '',
-              Get.find(),
-              Get.find()),
-    );
-    // Get.put<TodoController>(
-    //   TodoController(
-    //       Get.parameters['userSeq'] ?? '',
-    //       Get.find(),
-    //       Get.find()),
+    // Get.create<TodoController>(
+    //       () => TodoController(
+    //           Get.parameters['userSeq'] ?? '',
+    //           Get.find(),
+    //           Get.find()),
     // );
+    Get.put<TodoController>(
+      TodoController(
+          Get.parameters['userSeq'] ?? '',
+          Get.find(),
+          Get.find()),
+    );
   }
 }

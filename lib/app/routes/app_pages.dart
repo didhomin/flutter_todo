@@ -1,3 +1,5 @@
+import 'package:flutter_app/app/modules/todo_and_memo/bindings/todo_and_memo_binding.dart';
+import 'package:flutter_app/app/modules/todo_and_memo/views/todo_and_memo_view.dart';
 import 'package:flutter_app/models/user.dart';
 import 'package:get/get.dart';
 
@@ -65,10 +67,10 @@ class AppPages {
               children: [
                 GetPage(
                   name: _Paths.TODO_USER,
-                  page: () => TodoView(),
+                  page: () => TodoAndMemoView(),
                   title: 'TODO',
                   transition: Transition.zoom,
-                  binding: TodoBinding(),
+                  binding: TodoAndMemoBinding(),
                   middlewares: [
                     //only enter this route when authed
                     EnsureAuthMiddleware(),

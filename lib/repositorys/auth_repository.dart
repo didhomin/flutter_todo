@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/util/constants.dart';
 import 'package:flutter_app/util/http_helper.dart';
 import 'package:get/get_connect/connect.dart';
@@ -8,11 +9,14 @@ import 'package:flutter_app/models/user.dart';
 import 'package:flutter_app/models/response_data.dart';
 import 'package:get/get.dart';
 class AuthRepository extends GetConnect {
-
   @override
   void onInit() {
     httpClient.baseUrl = Constants.BASE_URL;
 
+  }
+
+  Map<String, String> getHeader() {
+    return {"Authorization": "Bearer ${AuthService.to.user.value.tokenId}"};
   }
 
   Future<ResponseData> join(User user) async {
@@ -46,7 +50,8 @@ class AuthRepository extends GetConnect {
 
   Future<ResponseData> logOut() async {
 
-    final response = await post('/api/auth/logout',null);
+    final response = await post('/api/auth/logout',null
+        , headers: getHeader());
 
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
@@ -57,7 +62,8 @@ class AuthRepository extends GetConnect {
 
   Future<ResponseData> getAccountList() async {
 
-    final response = await get('/api/account/list');
+    final response = await get('/api/account/list'
+        , headers: getHeader());
 
     if (response.statusCode == 200) {
       return ResponseData.fromJson(response.body);
