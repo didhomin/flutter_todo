@@ -3,40 +3,38 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 @JsonSerializable()
 class User {
-  final int seq;
-  final String id;
-  final String? password;
-  final String? nickname;
-  final int? todayTodoTotalCount;
-  final int? todayTodoCheckedCount;
-  final String? tokenId;
+  int seq;
+  String id;
+  String? password;
+  String? nickname;
+  int? todayTodoTotalCount;
+  int? todayTodoCheckedCount;
+  String? tokenId;
 
-  const User(
-    this.seq,
-    this.id,
-    this.nickname,
+  User(
   {
-    this.password = '',
+    this.seq = -1,
+    this.id = '',
+    this.nickname = null,
+    this.password = null,
     this.todayTodoTotalCount = 0,
     this.todayTodoCheckedCount = 0,
     this.tokenId = null
   });
 
-  const User.join(
+  User.join(
       this.id,
       this.password,{
       this.nickname = ''
   }) : this.seq = -1, this.todayTodoTotalCount = 0, this.todayTodoCheckedCount =0, this.tokenId = null;
 
-  const User.login(
+  User.login(
       this.id,
       this.password) : this.seq = -1,this.nickname = '', this.todayTodoTotalCount = 0, this.todayTodoCheckedCount =0, this.tokenId = null;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
-
-  static const empty = User(-1,'','');
 
   @override
   String toString() {

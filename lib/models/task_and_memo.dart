@@ -8,9 +8,9 @@ part 'task_and_memo.g.dart';
 
 @JsonSerializable()
 class TaskAndMemo {
-  List<Task>? taskList;
+  List<Rx<Task>>? taskList;
 
-  List<Memo>? memoList;
+  List<Rx<Memo>>? memoList;
 
   TaskAndMemo({
     this.taskList = null,

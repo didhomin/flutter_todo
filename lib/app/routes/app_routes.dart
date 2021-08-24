@@ -9,6 +9,7 @@ abstract class Routes {
 
   static const SETTINGS = _Paths.SETTINGS;
 
+  static const TODO_LIST = _Paths.HOME + _Paths.TODO + _Paths.LIST;
   static const TODO = _Paths.HOME + _Paths.TODO;
   static const TODO_INSERT = _Paths.HOME + _Paths.TODO + _Paths.INSERT;
   static String TODO_DETAILS(String todoSeq) => '$TODO/$todoSeq';
@@ -22,6 +23,7 @@ abstract class Routes {
 abstract class _Paths {
   static const HOME = '/home';
   static const TODO = '/todo';
+  static const LIST = '/list';
   static const INSERT = '/insert';
   static const HISTORY = '/history';
   static const SETTINGS = '/settings';

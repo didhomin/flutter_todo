@@ -72,4 +72,17 @@ class AuthRepository extends GetConnect {
     }
   }
 
+  Future<ResponseData> updateAccount(User user) async {
+    final body = user.toJson();
+    final response = await put('/api/account/update'
+        , body
+        , headers: getHeader());
+
+    if (response.statusCode == 200) {
+      return ResponseData.fromJson(response.body);
+    } else {
+      throw Exception('Failed Http request updateAccount ');
+    }
+  }
+
 }

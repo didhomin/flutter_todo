@@ -14,7 +14,7 @@ class AuthService extends GetxService {
   AuthRepository authRepository;
 
   final isLoggedIn = false.obs;
-  final user = User.empty.obs;
+  final user = User().obs;
 
   bool get isLoggedInValue => isLoggedIn.value;
 
@@ -45,6 +45,14 @@ class AuthService extends GetxService {
     ResponseData responseData = await authRepository.logOut();
     if (responseData.success == 'true') {
       isLoggedIn.value = false;
+    }
+
+  }
+
+  void update(User newUser) async {
+    ResponseData responseData = await authRepository.updateAccount(newUser);
+    if (responseData.success == 'true') {
+      user.value.nickname = newUser.nickname;
     }
 
   }

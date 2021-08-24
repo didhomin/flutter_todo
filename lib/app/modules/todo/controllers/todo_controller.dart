@@ -28,7 +28,7 @@ class TodoController extends GetxController {
   var now = DateTime.now().obs;
   var floatExtended = false.obs;
 
-  String get todayDtm => '${now.value.year}년 ${now.value.month}월 ${now.value.day}일';
+  String get todayDtm => '${now.value.year}년 ${now.value.month}월 ${now.value.day}일 ${DateFormat('EEEE').format(now.value)}';
   String get todayDateServerFormatted => DateFormat('yyyyMMdd').format(now.value);
 
   var todoList = <Rx<Task>>[].obs;
@@ -51,7 +51,7 @@ class TodoController extends GetxController {
     Get.printInfo(info: 'onReady');
     loadTodoList();
     loadMemoList();
-    loadTodoAndMemoList();
+    //loadTodoAndMemoList();
   }
 
   @override
@@ -86,8 +86,12 @@ class TodoController extends GetxController {
 
   todoRegister() async {
     final todo = Task.insert(userSeq.isNum ? int.parse(userSeq) : AuthService.to.user.value.seq,titleEditingController.text,todayDateServerFormatted);
+    if(isSecret.isTrue) {
+      todo.isPublic = false;
+    }
     final response = await todoRepository.insert(todo);
     titleEditingController.clear();
+    isSecret.value = false;
     Get.back();
 
     if (response.success == 'true') {
@@ -136,11 +140,6 @@ class TodoController extends GetxController {
     todoList.refresh();
   }
 
-  void setEditMode(int index) {
-    this.editModeIndex = index;
-    todoList.refresh();
-  }
-
   memoRegister() async {
     final memo = Memo.insert(AuthService.to.user.value.seq,titleEditingController.text,todayDateServerFormatted);
     if(isSecret.isTrue) {
@@ -179,34 +178,6 @@ class TodoController extends GetxController {
 
     memoList.removeAt(index);
 
-  }
-
-  void loadTodoAndMemoList() async {
-
-    var startDate = DateTime(now.value.year, now.value.month - 1, now.value.day);
-
-    final response = await todoRepository.getTodoAndMemoList(userSeq.isNum ? int.parse(userSeq) : AuthService.to.user.value.seq,DateFormat('yyyyMMdd').format(startDate),todayDateServerFormatted);
-
-    if (response.success == 'true') {
-      print('response.response!!!!');
-      print(response.response);
-
-      // List<Rx<Memo>>.from(response.response.map((x) => Memo.fromJson(x).obs));
-      // Map<String,dynamic>
-      map.value = (response.response as Map<String, dynamic>).obs;
-
-      // map.forEach((key, value) {
-      //   print('key  ${key}');
-      //   print('value  ${value}');
-      //   print('TaskAndMemo ${TaskAndMemo.fromJson(value)}');
-      // });
-      map.value.forEach((key, value) {
-        map.value[key] = TaskAndMemo.fromJson(value);
-      });
-      map.refresh();
-      //TaskAndMemo.fromJson(response.response)
-      // todoList.value = List<Rx<Task>>.from(response.response.map((x) => Task.fromJson(x).obs));
-    }
   }
 
   @override

@@ -8,7 +8,7 @@ import 'services/auth_service.dart';
 void main() {
   runApp(
     GetMaterialApp.router(
-      title: "TODO",
+      title: "윈드폴-업무일지",
       initialBinding: BindingsBuilder(
             () {
           Get.put(AuthRepository());

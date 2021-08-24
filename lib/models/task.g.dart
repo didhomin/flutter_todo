@@ -30,4 +30,5 @@ Map<String, dynamic> _$TaskToJoinJson(Task instance) => <String, dynamic>{
   'userSeq': instance.userSeq,
   'title': instance.title,
   'date': instance.date,
+  'publicYn': instance.isPublic,
 };

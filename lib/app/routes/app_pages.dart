@@ -101,6 +101,15 @@ class AppPages {
               binding: TodoBinding(),
               children: [
                 GetPage(
+                  name: _Paths.LIST,
+                  page: () => TodoAndMemoView(),
+                  binding: TodoAndMemoBinding(),
+                  middlewares: [
+                    //only enter this route when authed
+                    EnsureAuthMiddleware(),
+                  ],
+                ),
+                GetPage(
                   name: _Paths.TODO_DETAILS,
                   page: () => TodoDetailsView(),
                   binding: TodoDetailsBinding(),
@@ -118,6 +127,10 @@ class AppPages {
           title: 'Setting',
           page: () => SettingsView(),
           binding: SettingsBinding(),
+          middlewares: [
+            //only enter this route when authed
+            EnsureAuthMiddleware(),
+          ],
         ),
       ],
     ),

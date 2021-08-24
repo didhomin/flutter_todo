@@ -15,7 +15,7 @@ class HomeView extends GetView<HomeController> {
         if (currentLocation?.startsWith(Routes.TODO) == true) {
           currentIndex = 1;
         }
-        if (currentLocation?.startsWith(Routes.HISTORY) == true) {
+        if (currentLocation?.startsWith(Routes.TODO_LIST) == true) {
           currentIndex = 2;
         }
         return Scaffold(
@@ -35,7 +35,7 @@ class HomeView extends GetView<HomeController> {
                   delegate.toNamed(Routes.TODO);
                   break;
                 case 2:
-                  delegate.toNamed(Routes.HISTORY);
+                  delegate.toNamed(Routes.TODO_LIST);
                   break;
                 default:
               }
@@ -44,18 +44,18 @@ class HomeView extends GetView<HomeController> {
               // _Paths.HOME + [Empty]
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'Home',
+                label: '홈',
               ),
               // _Paths.HOME + Routes.PROFILE
               BottomNavigationBarItem(
                 icon: Icon(Icons.article_outlined),
-                label: 'TODO',
+                label: '업무일지(day)',
               ),
               // _Paths.HOME + _Paths.PRODUCTS
-              // BottomNavigationBarItem(
-              //   icon: Icon(Icons.work_outlined),
-              //   label: 'History',
-              // ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                label: '업무일지(month)',
+              ),
             ],
           ),
         );

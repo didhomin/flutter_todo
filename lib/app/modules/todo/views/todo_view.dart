@@ -64,6 +64,7 @@ class TodoView extends GetView<TodoController> {
                   child: const Text('날짜변경'),
                 onPressed: () async {
                   var newDate = await showDatePicker(
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
                     context: context,
                     initialDate: controller.now.value,
                     firstDate: DateTime(1900),
